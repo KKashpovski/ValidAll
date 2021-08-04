@@ -16,8 +16,6 @@ def valid_all(input_validation: Any, result_validation: Any, on_fail_repeat_time
                             result = func(*args, **kwargs)
                             if result_validation:
                                 break
-                                # print("Результат прошел проверку.")
-                                # return result
                             else:
                                 err = Exception("ResultVerificationError. Попытка: ", i)
                                 print(err)
@@ -84,8 +82,9 @@ class ResultVerificationError(Exception):
         return "Значение результата не подходит: " + str(self.errors_list)
 
 
+# можно протестировать работоспособность валидатора,раскомментировав строки 86-94.
 # @valid_all(input_validation=True, result_validation=True,
-#            on_fail_repeat_times=0, default_behavior=None)
+#            on_fail_repeat_times=1, default_behavior=None)
 # def foo(*args: Any, **kwargs: Any) -> Any:
 #     """Исходная функция."""
 #     return Any
