@@ -1,8 +1,5 @@
 """Тестирование валидатора."""
-import json
 import unittest
-from typing import Any
-import main
 from main import valid_all
 from main import InputParameterVerificationError
 from main import ResultVerificationError
@@ -34,19 +31,23 @@ class MyTestClass(unittest.TestCase):
         print("Tear down for [" + self.shortDescription() + "]")
         print("")
 
-    def test_positive_validate_json(self):
+    def test_validate_json(self):
         """Валидация входного json-параметра с ожидаемым положительным исходом."""
         @valid_all(input_validation=validate_json,
                    result_validation=regex_func,
                    on_fail_repeat_times=1,
-                   default_behavior=default_func)
+                   default_behavior=None)
         def my_func(argument: str) -> dict:
             """Функция, принимаемое и возвращаемое значение которой нужно провалидировать."""
-            x = '{"key": 123}'
-            y = json.loads(x)
-            return y
+            return {"key": int(argument)}
 
-        test = my_func('{"key": 123}')
+        try:
+            my_func('123')
+            test = True
+            return test
+        except InputParameterVerificationError:
+            test = False
+            return test
         self.assertTrue(test)
 
     def test_validate_string(self):
@@ -55,55 +56,30 @@ class MyTestClass(unittest.TestCase):
 
     def test_validate_result(self):
         """Проверка валидации возвращаемого результата."""
+        pass
+
+    def test_input_error(self):
+        """Проверка поднятия исключения InputParameterVerificationError."""
+
         @valid_all(input_validation=validate_json,
                    result_validation=regex_func,
                    on_fail_repeat_times=1,
                    default_behavior=default_func)
-        def my_func(argument: dict) -> str:
+        def my_func(argument: str) -> dict:
             """Функция, принимаемое и возвращаемое значение которой нужно провалидировать."""
-            x = '{"key": 123}'
-            return x
+            return {"key": int(argument)}
 
         try:
-            res = my_func({"key": 123})
-        except ResultVerificationError as err:
-            return err
-        assert type(res) == str
+            result = my_func('{"key": 123}')
+        except InputParameterVerificationError as err:
+            result = err
+        assert type(result) == InputParameterVerificationError
+        self.assertRaises(InputParameterVerificationError)
 
-    # def test_input_error(self):
-    #     """Проверка поднятия исключения InputParameterVerificationError."""
-    #
-    #     @valid_all(input_validation=validate_json,
-    #                result_validation=regex_func,
-    #                on_fail_repeat_times=1,
-    #                default_behavior=default_func)
-    #     def my_func(*args: Any, **kwargs: Any) -> Any:
-    #         """Функция, принимаемое и возвращаемое значение которой нужно провалидировать."""
-    #         return {'key': '123'}
-    #
-    #     try:
-    #         res = my_func(123)
-    #     except InputParameterVerificationError as err:
-    #         res = err
-    #     self.assert type(res)
-    #     self.assertRaises(InputParameterVerificationError)
-    #
-    # def test_result_error(self, on_fail_repeat_times=0):
-    #     """Проверка поднятия исключения ResultVerificationError."""
-    #     @valid_all(input_validation=validate_json,
-    #                result_validation=regex_func,
-    #                on_fail_repeat_times=1,
-    #                default_behavior=default_func)
-    #     def my_func(argument: dict) -> str:
-    #         """Функция, принимаемое и возвращаемое значение которой нужно провалидировать."""
-    #         return json["key"]
-    #
-    #     # try:
-    #     #     result = my_func(result_error)
-    #     # except ResultVerificationError as ex:
-    #     #     result = ex
-    #     self.assertRaises(ResultVerificationError)
-    #
+    def test_result_error(self, on_fail_repeat_times=0):
+        """Проверка поднятия исключения ResultVerificationError."""
+        pass
+
 
 if __name__ == "__main__":
     unittest.main()

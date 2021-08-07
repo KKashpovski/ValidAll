@@ -35,45 +35,45 @@ def valid_all(input_validation: Callable, result_validation: Callable, on_fail_r
 
 
 class InputParameterVerificationError(Exception):
-    """."""
+    """Докстринг."""
 
     def __init__(self, message: Any, errors_list: Any):
-        """."""
+        """Докстринг."""
         # Сначала вызов конструктора базового класса с параметрами которые ему нужны
         super().__init__(message)
         # Затем свой код исключения
         self.errors_list = errors_list
 
     def __str__(self) -> Any:
-        """."""
+        """Докстринг."""
         return "Входные параметры не подходят: " + str(self.errors_list)
 
 
 class ResultVerificationError(Exception):
-    """."""
+    """Докстринг."""
 
     def __init__(self, message: Any, errors_list: Any):
-        """."""
+        """Докстринг."""
         # Сначала вызов конструктора базового класса с параметрами которые ему нужны
         super().__init__(message)
         # Затем свой код исключения
         self.errors_list = errors_list
 
     def __str__(self) -> Any:
-        """."""
+        """Докстринг."""
         return "Значение результата не подходит: " + str(self.errors_list)
 
 
 class ZeroValueError(Exception):
-    """."""
+    """Докстринг."""
 
     def __init__(self, message: Any, errors_list: Any):
-        """."""
+        """Докстринг."""
         # Сначала вызов конструктора базового класса с параметрами которые ему нужны
         super().__init__(message)
         # Затем свой код исключения
         self.errors_list = errors_list
 
     def __str__(self) -> Any:
-        """."""
+        """Докстринг."""
         return "Повтор не предусмотрен: " + str(self.errors_list)
